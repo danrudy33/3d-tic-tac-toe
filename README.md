@@ -66,7 +66,8 @@ These sources document related rules, board structures, and mathematical backgro
 - [What Do We Do All Day — 8 Tic-Tac-Toe Variations](https://www.whatdowedoallday.com/tic-tac-toe-variations/) includes a 5×5 scoring game with equal mark counts, one blank square, and an explicit choice about whether marks may belong to overlapping lines.
 - [Alyssa S. Choi — Tic-Tac-Toe (National Museum of Mathematics)](https://momath.org/wp-content/uploads/2021/08/Alyssa-Choi-Tic-Tac-Toe.pdf) analyzes 3×3×3 race-format play and argues that a filled standard board cannot avoid a completed line.
 - [Alec Levine — Exploring Tic-Tac-Toe Variants](https://erich-friedman.github.io/research/levine.pdf) surveys higher-dimensional variants and analyzes first-player advantage on a 3×3×3 board.
-- [NRICH — Marbles in a Box](https://nrich.maths.org/problems/marbles-box) gives several systematic derivations of the cube's 49 lines, including the 27 axis-aligned, 18 planar-diagonal, and 4 space-diagonal breakdown.
+- [NRICH — Tic Tac Toe](https://nrich.maths.org/problems/tic-tac-toe) poses the problem of counting distinct winning lines on a 3×3×3 board.
+- [NRICH — Marbles in a Box](https://nrich.maths.org/problems/marbles-box) expands that investigation with several systematic derivations of the cube's 49 lines, including the 27 axis-aligned, 18 planar-diagonal, and 4 space-diagonal breakdown.
 
 ## Coordinate model
 
