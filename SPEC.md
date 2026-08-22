@@ -1,4 +1,4 @@
-# Cat's Cube MVP Specification
+# 3D Tic-Tac-Toe MVP Specification
 
 Status: implementation contract  
 Scope: browser-only local and bot play MVP

@@ -26,7 +26,7 @@ app.innerHTML = `
       <div class="hud__topline">
         <div>
           <p class="eyebrow">SPATIAL GRID</p>
-          <h1 id="game-title">Cat's Cube</h1>
+          <h1 id="game-title">3D Tic-Tac-Toe</h1>
         </div>
         <button class="reset" type="button" data-testid="reset-game">Reset game</button>
       </div>

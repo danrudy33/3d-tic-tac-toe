@@ -1,10 +1,12 @@
-# Cat's Cube
+# 3D Tic-Tac-Toe
+
+## Most Three in a Row Lines Wins
 
 > A browser-based 3×3×3 strategy game for local two-player matches or deterministic play against the built-in bot.
 
-[**Play online**](https://danrudy33.github.io/cats-cube/)
+[**Play online**](https://danrudy33.github.io/3d-tic-tac-toe/)
 
-![Cat's Cube — 3D board](qa-evidence/desktop-initial.png)
+![3D Tic-Tac-Toe — 3D board](qa-evidence/desktop-initial.png)
 
 Players fill 26 of the cube's 27 cells, count every completed three-in-a-row among 49 canonical lines, and compare final scores. The game prioritizes clear rules, fast interaction, focused layer selection, and equivalent keyboard-accessible move controls.
 
@@ -137,4 +139,4 @@ The detailed acceptance IDs in `SPEC.md` cover coordinate round trips, 49 unique
 
 ## License
 
-Cat's Cube is available under the [MIT License](LICENSE).
+3D Tic-Tac-Toe is available under the [MIT License](LICENSE).

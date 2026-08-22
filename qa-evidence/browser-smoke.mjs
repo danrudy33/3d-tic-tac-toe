@@ -35,6 +35,9 @@ try {
     const grid = document.querySelector('[role="grid"]')
     const live = document.querySelector('[role="status"]')
     return {
+      browserTitle: document.title,
+      gameTitle: document.querySelector('#game-title')?.textContent,
+      rulesetName: document.querySelector('[data-ruleset-name]')?.textContent,
       status: document.querySelector('[data-testid="game-status"]')?.textContent,
       cells: document.querySelectorAll('[data-cell-id]').length,
       enabled: [...document.querySelectorAll('[data-cell-id]')].filter((node) => !node.disabled).length,
@@ -49,6 +52,8 @@ try {
       horizontalOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
     }
   })
+  assert(initial.browserTitle === '3D Tic-Tac-Toe' && initial.gameTitle === '3D Tic-Tac-Toe', 'renamed product title')
+  assert(initial.rulesetName === 'Most Three in a Row Lines Wins', 'ruleset subtitle')
   assert(initial.status === "X's turn", 'initial status')
   assert(initial.cells === 27 && initial.enabled === 26 && initial.locked === 1, '27 cells with only X opening center locked')
   assert(initial.resetName === 'Reset game' && initial.canvasLabel && initial.canvasTabIndex === 0, 'named reset and focusable canvas')
