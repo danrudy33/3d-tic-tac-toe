@@ -58,6 +58,16 @@ The canonical winning-line set contains **49** lines:
 
 Every distinct completed canonical line counts once for its owner. A placement can add multiple overlapping lines, and none ends the game early.
 
+## Prior art and further reading
+
+These sources document related rules, board structures, and mathematical background. They do **not** establish unpublished solver values, node counts, opening tables, or playout statistics for this implementation.
+
+- [Math Things — 3-Dimensional Tic-Tac-Toe](https://maththings.net/3dimensional-tictactoe) documents a 3×3×3 physical game with a move-one center restriction, continued play after a line, and tally scoring on a filled board.
+- [What Do We Do All Day — 8 Tic-Tac-Toe Variations](https://www.whatdowedoallday.com/tic-tac-toe-variations/) includes a 5×5 scoring game with equal mark counts, one blank square, and an explicit choice about whether marks may belong to overlapping lines.
+- [Alyssa S. Choi — Tic-Tac-Toe (National Museum of Mathematics)](https://momath.org/wp-content/uploads/2021/08/Alyssa-Choi-Tic-Tac-Toe.pdf) analyzes 3×3×3 race-format play and argues that a filled standard board cannot avoid a completed line.
+- [Alec Levine — Exploring Tic-Tac-Toe Variants](https://erich-friedman.github.io/research/levine.pdf) surveys higher-dimensional variants and analyzes first-player advantage on a 3×3×3 board.
+- [NRICH — Marbles in a Box](https://nrich.maths.org/problems/marbles-box) gives several systematic derivations of the cube's 49 lines, including the 27 axis-aligned, 18 planar-diagonal, and 4 space-diagonal breakdown.
+
 ## Coordinate model
 
 Logical coordinates are integer tuples `(x, y, z)` with each component in `{-1, 0, 1}`:
