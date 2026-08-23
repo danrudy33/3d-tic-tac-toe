@@ -200,6 +200,7 @@ Return a fresh initial state from any status. Reset preserves the user's current
 - Clicking an occupied cell gives brief non-destructive feedback and does not change turns.
 - Reset is a semantic `<button>` outside the canvas.
 - `How to play` opens a modal dialog covering the opening-center restriction, 13 marks each, one empty cell, no early termination, canonical 49-line scoring, overlaps, and ties. Close and Escape dismiss it, focus stays inside while open and returns to the opener, and opening/closing it cannot mutate game state.
+- At 640px and wider, controls occupy a reserved sidebar that never overlays the board. Below 640px, a persistent score/status bar and `Game controls` button precede the board; the remaining controls are inert and collapsed by default in a scrollable, layout-participating drawer. Opening or closing the drawer cannot mutate game, layer, camera, or zoom state, and Escape closes it with focus returned to the toggle.
 
 Use `OrbitControls` with damping. Disable panning. Choose conservative polar angle and distance limits so the board cannot be lost or flipped into an incomprehensible view.
 

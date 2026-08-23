@@ -22,7 +22,20 @@ if (!app) throw new Error('Missing #app root')
 
 app.innerHTML = `
   <main class="game-shell" data-active-rules="fairest">
+    <aside class="game-sidebar">
     <section class="hud" aria-labelledby="game-title">
+      <div class="play-summary">
+        <div class="status-row">
+          <span class="turn-mark" aria-hidden="true">X</span>
+          <strong data-testid="game-status">X's turn</strong>
+        </div>
+        <div class="fairest-scoreboard" data-fairest-scoreboard>
+          <p class="line-score" data-line-score>X lines 0 · O lines 0</p>
+          <p class="mark-progress" data-mark-progress>Marks: X 0/13 · O 0/13</p>
+        </div>
+        <button class="controls-toggle" type="button" data-controls-toggle aria-expanded="false" aria-controls="game-controls">Game controls</button>
+      </div>
+      <div class="controls-panel" id="game-controls" data-controls-panel tabindex="-1">
       <div class="hud__topline">
         <div>
           <p class="eyebrow">SPATIAL GRID</p>
@@ -52,23 +65,19 @@ app.innerHTML = `
         <button type="button" data-layer="back" aria-pressed="false">Back</button>
       </div>
       <p class="layer-status" data-layer-status>Selecting: All layers</p>
-      <div class="status-row">
-        <span class="turn-mark" aria-hidden="true">X</span>
-        <strong data-testid="game-status">X's turn</strong>
-      </div>
-      <div class="fairest-scoreboard" data-fairest-scoreboard>
-        <p class="line-score" data-line-score>X lines 0 · O lines 0</p>
-        <p class="mark-progress" data-mark-progress>Marks: X 0/13 · O 0/13</p>
-      </div>
       <p class="restriction-status" data-restriction-status>X cannot play the center on move 1; it unlocks for O on move 2.</p>
       <p class="instructions">Drag to orbit · Wheel or pinch to zoom · [ / ] cycle layers</p>
+      <details class="accessible-board">
+        <summary>Keyboard move grid and instructions</summary>
+        <p>Arrow Left and Right move x. Arrow Up and Down move z. Page Up and Page Down move y. Enter or Space places.</p>
+        <div class="move-grid" role="grid" aria-label="Tic-tac-toe cells"></div>
+      </details>
+      </div>
     </section>
-    <canvas data-testid="board-canvas" tabindex="0" aria-label="3D tic-tac-toe board, 27 cells. Arrow keys move the selection; Page Up and Page Down change height in All mode; brackets cycle layer focus; Enter or Space places."></canvas>
-    <details class="accessible-board">
-      <summary>Keyboard move grid and instructions</summary>
-      <p>Arrow Left and Right move x. Arrow Up and Down move z. Page Up and Page Down move y. Enter or Space places.</p>
-      <div class="move-grid" role="grid" aria-label="Tic-tac-toe cells"></div>
-    </details>
+    </aside>
+    <div class="board-stage">
+      <canvas data-testid="board-canvas" tabindex="0" aria-label="3D tic-tac-toe board, 27 cells. Arrow keys move the selection; Page Up and Page Down change height in All mode; brackets cycle layer focus; Enter or Space places."></canvas>
+    </div>
     <dialog class="rules-dialog" data-rules-dialog aria-labelledby="rules-title">
       <div class="rules-dialog__panel">
         <div class="rules-dialog__header">
@@ -106,6 +115,8 @@ const rulesDialog = app.querySelector<HTMLDialogElement>('[data-rules-dialog]')!
 const closeRulesButton = app.querySelector<HTMLButtonElement>('[data-close-rules]')!
 const lineScoreElement = app.querySelector<HTMLElement>('[data-line-score]')!
 const markProgressElement = app.querySelector<HTMLElement>('[data-mark-progress]')!
+const controlsToggle = app.querySelector<HTMLButtonElement>('[data-controls-toggle]')!
+const controlsPanel = app.querySelector<HTMLElement>('[data-controls-panel]')!
 
 let state = createInitialState('fairest')
 let activeLayer: LayerSelection = 'all'
@@ -113,6 +124,36 @@ let mode: 'local' | 'bot' = 'local'
 let humanPlayer: Player = 'X'
 let botThinking = false
 let botTimer: number | null = null
+const phoneLayout = window.matchMedia('(max-width: 639px)')
+let controlsOpen = false
+
+function syncControlsPanel(): void {
+  const phone = phoneLayout.matches
+  controlsToggle.hidden = !phone
+  controlsToggle.setAttribute('aria-expanded', String(phone && controlsOpen))
+  controlsPanel.dataset.open = String(phone && controlsOpen)
+  controlsPanel.toggleAttribute('inert', phone && !controlsOpen)
+  if (phone && !controlsOpen) controlsPanel.setAttribute('aria-hidden', 'true')
+  else controlsPanel.removeAttribute('aria-hidden')
+}
+
+controlsToggle.addEventListener('click', () => {
+  controlsOpen = !controlsOpen
+  syncControlsPanel()
+  if (controlsOpen) controlsPanel.focus()
+})
+phoneLayout.addEventListener('change', () => {
+  controlsOpen = false
+  syncControlsPanel()
+})
+document.addEventListener('keydown', (event) => {
+  if (event.key !== 'Escape' || !phoneLayout.matches || !controlsOpen || rulesDialog.open) return
+  controlsOpen = false
+  syncControlsPanel()
+  controlsToggle.focus()
+})
+syncControlsPanel()
+
 const buttons = Array.from({ length: 27 }, (_, id) => {
   const button = document.createElement('button')
   button.type = 'button'

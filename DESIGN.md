@@ -137,6 +137,8 @@ Keep status language direct: `X to move`, `O to move`, `X wins`, `O wins`, or `D
 
 ## Layout
 
+The HUD never overlays the canvas. Desktop and tablet reserve a 280–340px sidebar beside the board. Below 640px, show only turn/status, both score chips, mark progress, and a 44px `Game controls` button in a compact bar above the board; all other controls live in a collapsed-by-default drawer that participates in layout, scrolls internally, closes with Escape, and returns focus to its toggle.
+
 ### Board coordinate system
 
 Use integer logical coordinates `x, y, z` in `[-1, 0, 1]`. Map each cell center to world position:

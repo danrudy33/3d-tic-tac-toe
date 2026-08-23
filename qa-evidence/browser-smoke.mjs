@@ -124,6 +124,7 @@ try {
   await page.evaluate(() => document.activeElement?.blur())
   const afterReset = await canvas.screenshot({ path: `${outDir}canvas-after-reset.png` })
   const cameraHashes = { afterDrag: hash(oriented), afterReset: hash(afterReset) }
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
   await page.mouse.wheel(0, -600)
   await page.waitForTimeout(500)
   const zoomed = await canvas.screenshot({ path: `${outDir}canvas-after-zoom.png` })
@@ -153,19 +154,25 @@ try {
   const mobile = await page.evaluate(() => {
     const canvas = document.querySelector('canvas')
     const status = document.querySelector('[data-testid="game-status"]')?.getBoundingClientRect()
+    const score = document.querySelector('[data-fairest-scoreboard]')?.getBoundingClientRect()
     const reset = document.querySelector('[data-testid="reset-game"]')?.getBoundingClientRect()
+    const toggle = document.querySelector('[data-controls-toggle]')?.getBoundingClientRect()
     return {
       viewport: [innerWidth, innerHeight],
       cssSize: [canvas?.clientWidth, canvas?.clientHeight],
       backingSize: [canvas?.width, canvas?.height],
       horizontalOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
       statusVisible: Boolean(status && status.width && status.height),
+      scoreVisible: Boolean(score && score.width && score.height),
       resetVisible: Boolean(reset && reset.width && reset.height),
-      resetHeight: reset?.height,
+      controlsVisible: Boolean(toggle && toggle.width && toggle.height),
+      controlsHeight: toggle?.height,
+      panelDisplay: getComputedStyle(document.querySelector('[data-controls-panel]')).display,
     }
   })
-  assert(mobile.horizontalOverflow === 0 && mobile.statusVisible && mobile.resetVisible, 'mobile visibility and no horizontal overflow')
-  assert((mobile.resetHeight ?? 0) >= 44, 'mobile reset touch target')
+  assert(mobile.horizontalOverflow === 0 && mobile.statusVisible && mobile.scoreVisible && mobile.controlsVisible, 'mobile score/status controls visibility and no horizontal overflow')
+  assert(!mobile.resetVisible && mobile.panelDisplay === 'none', 'mobile control drawer is collapsed by default')
+  assert((mobile.controlsHeight ?? 0) >= 44, 'mobile Game controls touch target')
   assert(mobile.backingSize[0] !== initial.backingSize[0] || mobile.backingSize[1] !== initial.backingSize[1], 'canvas backing resized')
   results.mobile = mobile
   await page.screenshot({ path: `${outDir}mobile-320x568.png`, fullPage: true })
@@ -173,7 +180,7 @@ try {
   const focusPage = await context.newPage()
   await focusPage.goto(baseURL, { waitUntil: 'networkidle' })
   const tabOrder = []
-  for (let index = 0; index < 9; index += 1) {
+  for (let index = 0; index < 10; index += 1) {
     await focusPage.keyboard.press('Tab')
     tabOrder.push(await focusPage.evaluate(() => {
       const active = document.activeElement
@@ -186,7 +193,7 @@ try {
   }
   const keyboardOutline = await focusPage.locator('canvas').evaluate((node) => getComputedStyle(node).outlineStyle)
   results.keyboard.tabOrder = tabOrder
-  assert(JSON.stringify(tabOrder) === JSON.stringify(['reset-game', 'how-to-play', 'local', 'bot', 'all', 'front', 'middle', 'back', 'board-canvas']), 'Tab reaches reset, instructions, mode controls, layer controls, then canvas')
+  assert(JSON.stringify(tabOrder) === JSON.stringify(['reset-game', 'how-to-play', 'local', 'bot', 'all', 'front', 'middle', 'back', 'SUMMARY', 'board-canvas']), 'Tab reaches reset, instructions, mode controls, layer controls, then canvas')
   assert(keyboardOutline !== 'none', 'keyboard focus indicator is visible')
   results.keyboard.keyboardOutline = keyboardOutline
   await focusPage.close()
@@ -201,6 +208,7 @@ try {
     mediaMatches: matchMedia('(prefers-reduced-motion: reduce)').matches,
     transitionDuration: getComputedStyle(document.querySelector('[data-testid="reset-game"]')).transitionDuration,
   }))
+  await reducedPage.locator('[data-controls-toggle]').click()
   await reducedPage.locator('details').evaluate((node) => { node.open = true })
   await reducedPage.locator('[data-cell-id="1"]').click()
   const reducedState = await state(reducedPage)

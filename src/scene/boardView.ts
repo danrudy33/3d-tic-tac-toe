@@ -435,6 +435,7 @@ export class BoardView {
   private animate = (): void => {
     requestAnimationFrame(this.animate)
     this.controls.update()
+    this.canvas.dataset.cameraState = this.camera.position.toArray().map((value) => value.toFixed(6)).join(',')
     const angle = Math.atan2(this.camera.position.x, this.camera.position.z)
     this.marks.children.forEach((mark) => { mark.rotation.y = angle })
     this.locks.children.forEach((lock) => { lock.rotation.y = angle })

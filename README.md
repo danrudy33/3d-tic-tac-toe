@@ -97,6 +97,8 @@ Ids therefore run from 0 through 26, with x changing fastest. The game state sto
 - Keyboard on the canvas or labeled 27-cell grid: Left/Right change x, Up/Down change z, Page Up/Page Down change y, and Enter or Space places.
 - Reset button: clear the board and return to X without moving the camera.
 
+Desktop and tablet layouts reserve a non-overlapping sidebar for the HUD. Below 640px, only turn/status and score progress remain persistently visible; **Game controls** opens the remaining controls in a collapsed-by-default, scrollable drawer that can also be closed with Escape.
+
 The canvas is supplementary visual output. Semantic controls expose all moves, occupancy, coordinates, status, and reset to keyboard and assistive-technology users.
 
 ## Architecture boundaries
@@ -123,7 +125,7 @@ Important decisions:
 
 ## Responsive and accessibility baseline
 
-The normal play surface fits within `100dvh`. At 720 px and wider, the board uses a board-first layout with adjacent or edge HUD; narrower layouts stack compact status/actions above the largest fitting square canvas. The target minimum viewport is 320×568 CSS px, including support for safe areas and 200% zoom.
+The normal play surface fits within `100dvh`. At 640px and wider, the board uses a reserved-width sidebar beside the canvas. Narrower layouts stack a compact score/status bar above the board and keep the control drawer collapsed during normal play. The target minimum viewport is 320×568 CSS px, including support for safe areas and 200% zoom.
 
 X and O differ by shape and color. Focus is visible, touch targets are at least 44×44 CSS px, status updates use a polite live region, reduced-motion preferences are respected, and text/control contrast targets WCAG AA.
 

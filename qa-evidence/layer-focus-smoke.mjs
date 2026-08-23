@@ -105,6 +105,8 @@ try {
 
   await page.setViewportSize({ width: 320, height: 568 })
   await page.waitForTimeout(100)
+  await page.locator('[data-controls-toggle]').click()
+  await page.waitForTimeout(50)
   const mobile = await page.evaluate(() => {
     const group = document.querySelector('.layer-controls')?.getBoundingClientRect()
     const buttons = [...document.querySelectorAll('.layer-controls button')].map((button) => button.getBoundingClientRect())
