@@ -4,6 +4,7 @@ const browser = await chromium.launch({ headless: true })
 const errors = []
 const result = {}
 const assert = (condition, message) => { if (!condition) throw new Error(message) }
+const baseURL = process.env.BASE_URL ?? 'http://127.0.0.1:5173/'
 
 
 const layout = (page) => page.evaluate(() => {
@@ -41,7 +42,7 @@ try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
   page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()) })
   page.on('pageerror', (error) => errors.push(error.message))
-  await page.goto('http://127.0.0.1:5173/', { waitUntil: 'networkidle' })
+  await page.goto(baseURL, { waitUntil: 'networkidle' })
 
   let current = await layout(page)
   assertNoOverlap(current, false)
